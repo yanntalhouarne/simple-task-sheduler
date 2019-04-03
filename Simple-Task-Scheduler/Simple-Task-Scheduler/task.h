@@ -42,4 +42,7 @@ void _Task_scheduleTask();
 
 void _Task_updateState();
 
+void _Task_orderTask(struct Task * newTask);
+
+
 #endif /* TASK_H_ */
