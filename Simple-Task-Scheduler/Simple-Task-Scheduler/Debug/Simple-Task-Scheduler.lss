@@ -311,8 +311,8 @@ void _Task_orderTask(struct Task * newTask)
 	if (cur == _Task_headList) // the case where the new task has the highest priority   \
  1ec:	45 2b       	or	r20, r21
  1ee:	39 f4       	brne	.+14     	; 0x1fe <_Task_orderTask+0x3c>
-								  (becomes the first task in the list, so the header must\
-								  point to it
+								  (becomes the first task in the list), so the header    \
+								  must point to it									     
 	{
 		newTask->next = _Task_headList;
  1f0:	1b 86       	std	Y+11, r1	; 0x0b

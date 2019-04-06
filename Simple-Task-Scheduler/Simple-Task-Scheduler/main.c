@@ -51,6 +51,7 @@ int main(void)
 	_Task_setTickPeriod(1); // set the scheduler period to 1ms
 	
 	_Task_newTask(TASK1_ID, TASK1_PERIOD, TASK1_PRIORITY, &task1_callback); 
+	
 	_Task_newTask(TASK2_ID, TASK2_PERIOD, TASK2_PRIORITY, &task2_callback); 
 	
 	_Task_releaseTasks();

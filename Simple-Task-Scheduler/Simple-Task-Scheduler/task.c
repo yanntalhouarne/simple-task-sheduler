@@ -4,7 +4,9 @@
  * Created: 3/31/2019 12:13:49 PM
  *  Author: Yann
  *
- * This is a simple task scheduler implementation. 
+ * Brief: This is a simple task scheduler implementation. 
+ * 
+ * 
  * Features: - 1ms-10ms selectable tick period
  *			 - non-preemptive
  *			 - priority based
@@ -94,20 +96,19 @@ void _Task_newTask(int _ID, uint8_t _period, int _priority, void (*_funptr)())
  ************************************************************************************/
 void _Task_orderTask(struct Task * newTask)
 {
-	struct Task * prev;
-	
+	// temp nodes
+	struct Task * prev; 
 	struct Task * cur;
-	
+
+	// go through the list until we find a lowest priority task (list should already \
+	   be ordered) or until the end of the list (if the new tasks priority is the lowest
 	for (cur = _Task_headList, 
 		 prev = NULL; newTask->priority > cur->priority || cur != NULL; 
-		 prev = cur, cur = cur->next); // go through the list until we find a lowest     \
-									      priority task (list should already be ordered) \
-									      or until the end of the list (if the new tasks \
-										  priority is the lowest						 \
-										  
-	if (cur == _Task_headList) // the case where the new task has the highest priority   \
-								  (becomes the first task in the list, so the header must\
-								  point to it
+		 prev = cur, cur = cur->next); 
+
+	// the case where the new task has the highest priority (becomes the first task \
+	   in the list), so the header must point to it											  
+	if (cur == _Task_headList) 							     
 	{
 		newTask->next = _Task_headList;
 		
@@ -131,8 +132,9 @@ void _Task_orderTask(struct Task * newTask)
 void _Task_scheduleTask()
 {
 	struct Task * cur;
-	
-	for (cur = _Task_headList; cur != NULL; cur = cur->next) // go through the list until we find a task that is in the ready state
+
+	// go through the list until we find a task that is in the ready state
+	for (cur = _Task_headList; cur != NULL; cur = cur->next) 
 	{
 		if (cur->state == READY)
 		{
@@ -154,56 +156,24 @@ void _Task_updateState()
 	ms_count++; // increment ms count
 		
 	struct Task * cur;	
-		
-	for (cur = _Task_headList; cur != NULL; cur = cur->next) // go through the list until we find a task that is in the ready state
+	
+	// go through the list until we find a task that is in the ready state
+	for (cur = _Task_headList; cur != NULL; cur = cur->next) 
 	{
 		if (ms_count == cur->expire_time) // if the task need to be executed,
 		{
-			if ( (cur->state == EXECUTING) || (cur->state == READY) ) // if the task is EXECUTING or still in the READY state, the deadline has been missed
+			// if the task is EXECUTING or still in the READY state, the \
+			   deadline has been missed
+			if ( (cur->state == EXECUTING) || (cur->state == READY) ) 
 			{
 				cur->missed_deadline++;
 			}
-			else
+			else // else update the next expiration time (next deadline)
 			{
-				cur->expire_time += cur->period; // else update the next expiration time (next deadline)
+				cur->expire_time += cur->period; 
 				cur->state = READY; // set the task to ready state
 			}
 		}
 	}
 }
 
-
-
-
-
-
-// void print_task_list()
-// {
-// 	uint8_t k;
-//
-// 	println_1("- &&&&& TASK LIST &&&&&;");
-// 	SPACE;
-//
-// 	print_1(" => number of tasks = ;");
-// 	println_int_1(task_count);
-// 	SPACE;
-//
-// 	for (k = 0; k < task_count; k++)
-// 	{
-// 		print_1("* Task ;");
-// 		println_int_1(k+1);
-// 		print_1(" - ID = ;");
-// 		println_int_1(task_array[k].ID);
-// 		print_1(" - period = ;");
-// 		println_int_1(task_array[k].period);
-// 		print_1(" - priotrity = ;");
-// 		println_int_1(task_array[k].priority);
-// 		print_1(" - next release time = ;");
-// 		println_int_1(task_array[k].expire_time);
-// 		//println_1(" - running function:;");
-// 		//(task_array[k].funptr)();
-// 		SPACE;
-// 	}
-// 	SPACE;
-//
-// }
